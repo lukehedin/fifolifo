@@ -1,0 +1,14 @@
+.textareas {
+    display: inline-block;
+    width: 80%;
+}
+
+.controls{
+    display: inline-block;
+    width: 20%;    
+}
+
+textarea {
+    width: 30%;
+    height: 200px;
+}

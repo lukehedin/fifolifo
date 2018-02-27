@@ -1,0 +1,24 @@
+{
+	"questions": [{
+		"id": 1,
+		"questionText": "Explain the dfference between not defined and undefined.",
+		"questionCode": null,
+		"difficulty": 1,
+		"codeResponse": false,
+		"copyCode": false,
+		"tags": ["JavaScript"],
+		"enabled": true,
+		"answer": "the big difference is..."
+	}, {
+		"id": 2,
+		"questionText": "What is a simple way to immediately invoke this function?",
+		"questionCode": "function foo(){\n\tlet a = 3;\n\tconsole.log(a);\n};",
+		"difficulty": 1,
+		"codeResponse": true,
+		"copyCode": false,
+		"tags": ["JavaScript"],
+		"enabled": true,
+		"answer": "the big difference is..."
+	}],
+	"playthroughs": []
+}
