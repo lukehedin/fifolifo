@@ -7,27 +7,59 @@ class EditRow extends Component {
     super(props);
 
     this.state = {
-        question: props.question
+        question: props.question,
+        isEdited: !props.question.id
     }
   }
   componentDidMount() {
 
   }
+  saveQuestionData = (qData) => {
+    return fetch('/api/savequestion', {
+      body: JSON.stringify(qData), // must match 'Content-Type'
+      method: "POST",
+      headers: {
+          'content-type': 'application/json'
+          }
+      });
+  }
+  saveQuestion(){
+    this.saveQuestionData(this.state.question)
+    .then(res => {
+        console.log(res);
+        this.setState({
+            isEdited: false
+        });
+    });
+  }
+  updateQuestionProperty(prop, value){
+    let questionCopy = this.state.question;
+    questionCopy[prop] = value;    
+    this.setState({ question: questionCopy });
+    
+    this.setState({ isEdited: true });
+  }
+  //LH SHOULD BE QUESTOIN.QUESTIONTEXT
+  onTextChange = e => this.updateQuestionProperty('questionText', e.target.value)
+  onCodeChange = e => this.updateQuestionProperty('questionCode', e.target.value)
+  onAnswerChange = e => this.updateQuestionProperty('answer', e.target.value)
   render() {
     return (
-        <div className="edit-row">
+
+        <div className={"edit-row " + (this.state.isEdited ? 'editing' : '')}>
             <div className="textareas">
-                <textarea className="question-text" defaultValue={this.state.question.questionText}/>
-                <CodeArea className="question-code" value={this.state.question.questionCode} />
+                <textarea className="question-text" defaultValue={this.state.question.questionText} onChange={this.onTextChange.bind(this)} />
+                <CodeArea className="question-code" defaultValue={this.state.question.questionCode} onChange={this.onCodeChange.bind(this)} />
                 {/* Some of these aren't code questions but we make them all code areas for it to be easy */}
-                <CodeArea className="question-answer" value={this.state.question.answer} />
+                <CodeArea className="question-answer" defaultValue={this.state.question.answer} onChange={this.onAnswerChange.bind(this)} />
             </div>
             <div className="controls">
-                <input type="number" />Difficulty
-                <input type="checkbox" />Requires code response
-                <input type="checkbox" />Copy code to response
-                <input type="checkbox" />Enabled
-                <button>Save</button>
+                <input type="number" defaultValue={this.state.question.difficulty} />Difficulty
+                <input type="checkbox" defaultChecked={this.state.question.codeResponse} />Requires code response
+                <input type="checkbox" defaultChecked={this.state.question.copyCode} />Copy code to response
+                <input type="checkbox" defaultChecked={this.state.question.enabled} /> Enabled
+                <button onClick={this.saveQuestion.bind(this)}>Save</button>
+                <button>Delete</button>
             </div>
         </div>
     );

@@ -12,3 +12,7 @@ textarea {
     width: 30%;
     height: 200px;
 }
+
+.editing {
+    background-color: #e6c078;
+}

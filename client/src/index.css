@@ -2,8 +2,20 @@ body {
   margin: 0;
   padding: 0;
   font-family: sans-serif;
+  background-color: #f7edda;
+  color: #062b33;
 }
 
 textarea {
   font-family: Arial, Helvetica, sans-serif;
+  background-color: #f9f6f0;
+  color: #062b33;
+}
+
+.fifo-red {
+  color: #F24738;
+}
+
+.lifo-blue {
+  color: #338ca0;
 }
