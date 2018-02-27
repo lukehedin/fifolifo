@@ -5,10 +5,6 @@ class CodeArea extends Component {
   constructor(props) {
     super(props);
 
-    this.state = {
-        defaultValue: props.defaultValue,
-        onChange: props.onChange
-    }
   }
   onKeyDown(e){
     let keyCode = e.keyCode || e.which;
@@ -33,7 +29,7 @@ class CodeArea extends Component {
   }
   render() {
     return (
-        <textarea className="codearea" onKeyDown={this.onKeyDown} defaultValue={this.state.defaultValue} onChange={this.state.onChange}/>
+        <textarea className="codearea" onKeyDown={this.onKeyDown} value={this.props.value} onChange={this.props.onChange.bind(this)}/>
     );
   }
 }

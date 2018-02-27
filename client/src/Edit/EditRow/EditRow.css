@@ -16,3 +16,7 @@ textarea {
 .editing {
     background-color: #e6c078;
 }
+
+.edit-row {
+    padding: 5px 10px;
+}
