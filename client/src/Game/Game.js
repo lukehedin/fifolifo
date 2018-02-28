@@ -8,24 +8,68 @@ class Game extends Component {
       super(props);
   
       this.state = {
+        questions: [],
+        gameResults: {},
         gameSettings: {},
         timeBegun: null,
-        timeCompleted: null
+        timeComplete: null
       };
     }
+    componentDidMount(){
+
+    }
     startGame(gameSettings){
+        fetch('/api/questions')
+        .then(res => res.json())
+        .then(res => {
+            console.log(res);
+  
+            this.setState({
+                questions: res,
+                gameSettings: gameSettings,
+                timeBegun: new Date()
+            });
+        })
+        .catch(err => console.log(err));
+    }
+    completeGame = results => {
         this.setState({
-            gameSettings: gameSettings,
-            timeBegun: new Date() 
+            questions: [], //unload question data
+            timeComplete: new Date(),
+            gameResults: results
+        });
+    }
+    savePlaythrough(){
+        fetch('/api/saveplaythrough', {
+            body: JSON.stringify({
+                gameResults: this.state.gameResults,
+                gameSettings: this.state.gameSettings,
+                timeBegun: this.state.timeBegun,
+                timeComplete: this.state.timeComplete
+            }),
+            method: "POST",
+            headers: {
+                'content-type': 'application/json'
+            }
+        }).then(res => {
+            console.log(res);
+            this.setState({
+                gameResults: {},
+                gameSettings: {},
+                timeBegun: null,
+                timeComplete: null
+              });
         });
     }
     render() {
-
-        if(this.startGame.timeCompleted) {
-            return(<div>you did it</div>)
+        if(this.state.timeComplete) {
+            return(<div>
+                Game complete!
+                <button onClick={this.savePlaythrough.bind(this)}>Save Playthrough and Reset</button>
+            </div>)
         } else if(this.state.timeBegun) {
-            return(<GamePlay gameSettings={this.state.gameSettings} />)
-        } else{
+            return(<GamePlay questions={this.state.questions} gameSettings={this.state.gameSettings} onComplete={this.completeGame.bind(this)} />)
+        } else {
             return(<GameSetup startGameFn={this.startGame.bind(this)} />)
         }
   }

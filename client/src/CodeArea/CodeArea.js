@@ -10,7 +10,7 @@ class CodeArea extends Component {
         e.preventDefault();
 
         let textArea = e.target;
-
+        
         let start = textArea.selectionStart;
         let end = textArea.selectionEnd;
 

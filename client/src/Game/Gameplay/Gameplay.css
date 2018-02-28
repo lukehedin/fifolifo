@@ -43,13 +43,59 @@
 .play-area {
     padding: 10px;
     display: flex;
+    flex-direction: column;
+}
+
+.play-area-top {
+    flex-grow: 1;
+    display: flex;
+}
+
+.play-area-bottom{
+    height: 100px;
 }
 
 .question-area, .answer-area, .response-area {
     width: 50%;
+    padding: 10px;
+}
+
+.question-area, .response-area{
+    display: flex;
+    flex-direction: column;
+}
+
+.question-code {
+   flex-grow: 1;
+   position: relative;
 }
 
 .full-textarea {
-    height: 60%;
+    height: 100%;
+    width: 100%;
+}
+
+.play-area-button {
+    width: 50%;
+    height: 100%;
+    font-size: 32px;
+    background-color: #e6c078;
+    border: none;
+    cursor: pointer;
+}
+
+.correct-button {
+    background-color: #338ca0;
+}
+
+.incorrect-button{
+    background-color: #F24738;
+}
+
+.play-area-button:hover{
+    opacity: 0.8;
+}
+
+.full-width{
     width: 100%;
 }

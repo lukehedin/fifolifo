@@ -9,18 +9,11 @@ const App = () => (
   <Router>
     <div>
       <Nav />
-      <Route exact path="/" component={Home} />
+      <Route exact path="/" component={Game} />
       <Route path="/edit" component={Edit} />
       <Route path="/stats" component={Stats} />
-      <Route path="/game" component={Game} />
     </div>
   </Router>
-);
-
-const Home = () => (
-  <div>
-    <h2>Home</h2>
-  </div>
 );
 
 export default App;

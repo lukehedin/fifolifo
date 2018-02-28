@@ -4,6 +4,9 @@ class Timer extends Component {
     constructor(props) {
         super(props);
 
+        //this is causing a warning
+        //https://facebook.github.io/react-native/docs/timers.html
+
         let secs = parseInt(this.props.countdownSecs, 10) || 0;
         let mins = parseInt(this.props.countdownMins, 10) || 0;
 
@@ -15,15 +18,36 @@ class Timer extends Component {
         }
     }
     componentDidMount(){
-        //if no secs or mins, dont start the timer or do anything
-        if(this.state.initialMins === 0 && this.state.initialSecs === 0) return;
-
         this.props.countDown 
         ? this.tickDown()
         : this.tickUp()
     }
+    tickUp(){
+        var timer = this;
+
+        setTimeout(() => {
+            let newSecs = timer.state.secs + 1;
+            if(newSecs > 59){
+                let newMins = timer.state.mins + 1;
+
+                timer.setState({
+                    mins: newMins,
+                    secs: 0
+                });
+                timer.tickUp();
+            } else {
+                timer.setState({
+                    secs: newSecs
+                });
+                timer.tickUp();
+            }
+        }, 1000); 
+    }
     tickDown(){
         var timer = this;
+
+        //if no secs or mins, dont start the timer or do anything
+        if(this.state.initialMins === 0 && this.state.initialSecs === 0) return;
 
         setTimeout(() => {
             let newSecs = timer.state.secs - 1;
@@ -57,9 +81,9 @@ class Timer extends Component {
     }
     render() {
         return (
-            <div>
+            <span>
                 {this.state.mins}:{(this.state.secs < 10 ? "0" : "") + this.state.secs}
-            </div>
+            </span>
         );
     }
 }

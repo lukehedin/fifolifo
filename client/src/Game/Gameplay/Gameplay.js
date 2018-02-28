@@ -10,6 +10,7 @@ class Gameplay extends Component {
       super(props);
 
       this.state = {
+        complete: false,
         activeQuestion: null,
         viewingAnswer: false,
         usedQuestionIds: [],
@@ -32,7 +33,7 @@ class Gameplay extends Component {
     }
     getRandomQuestion(tags = null){
         //TODO tag filter
-        let questions = this.props.gameSettings.questions.filter(q => {
+        let questions = this.props.questions.filter(q => {
             return this.state.usedQuestionIds.indexOf(q.id) === -1;
         });
 
@@ -67,8 +68,9 @@ class Gameplay extends Component {
         let anyLifo = lifoItems.length > 0;
         
         if(!anyLifo && !anyFifo) {
-            //game is complete
-            console.log('well');
+            this.setState({
+                complete: true
+            });
             return;
         } else if (!anyLifo) {
             //If no lifo, get the next fifo item and put its questions into lifo
@@ -121,30 +123,42 @@ class Gameplay extends Component {
             lifoItems: lifoItems
         }); 
     }
+    completeClicked(){
+        this.props.onComplete({
+            correctQuestions: this.state.correctQuestions, 
+            incorrectQuestions: this.state.incorrectQuestions
+        });
+    }
     render() {
         let activeQuestionArea = !this.state.activeQuestion 
         ? ''
         : (<div className="play-area">
-            <div className={"question-area " + (this.state.viewingAnswer ? 'hidden' : '')}>
-                <div className="question-text">
-                    {this.state.activeQuestion.questionText}
+            <div className="play-area-top">
+                <div className={"question-area " + (this.state.viewingAnswer ? 'hidden' : '')}>
+                    <div className="question-text">
+                        {this.state.activeQuestion.questionText}
+                    </div>
+                    {this.state.activeQuestion.questionCode 
+                        ? <CodeArea readOnly className="full-textarea" value={this.state.activeQuestion.questionCode} />
+                        : ''
+                    }
                 </div>
-                <div className="question-code">
-                    {this.state.activeQuestion.questionCode}
+                <div className={"answer-area " + (this.state.viewingAnswer ? '' : 'hidden')}>
+                    {this.state.activeQuestion.codeResponse 
+                        ? <CodeArea readOnly className="full-textarea" value={this.state.activeQuestion.answer} /> 
+                        : <textarea readOnly className="full-textarea" value={this.state.activeQuestion.answer} />}
+                </div>
+                <div className="response-area">
+                    {this.state.activeQuestion.codeResponse 
+                        ? <CodeArea className="full-textarea" /> 
+                        : <textarea className="full-textarea" />}
                 </div>
             </div>
-            <div className={"answer-area " + (this.state.viewingAnswer ? '' : 'hidden')}>
-                {this.state.activeQuestion.codeResponse 
-                    ? <CodeArea readOnly className="full-textarea" value={this.state.activeQuestion.answer} /> 
-                    : <textarea readOnly className="full-textarea" value={this.state.activeQuestion.answer} />}
-            </div>
-            <div className="response-area">
-                {this.state.activeQuestion.codeResponse 
-                    ? <CodeArea className="full-textarea" /> 
-                    : <textarea className="full-textarea" />}
-                <button className={(this.state.viewingAnswer ? 'hidden' : '')} onClick={this.viewAnswer.bind(this)}>View Answer</button>
-                <button className={(this.state.viewingAnswer ? '' : 'hidden')} onClick={this.correctQuestion.bind(this)}>I answered it perfectly</button>
-                <button className={(this.state.viewingAnswer ? '' : 'hidden')} onClick={this.incorrectQuestion.bind(this)}>I didn't answer well enough</button>
+            <div className="play-area-bottom">
+                <button className={"play-area-button full-width " + (!this.state.viewingAnswer && !this.state.complete ? '' : 'hidden')} onClick={this.viewAnswer.bind(this)}>View Answer</button>
+                <button className={"play-area-button incorrect-button " + (this.state.viewingAnswer && !this.state.complete ? '' : 'hidden')} onClick={this.incorrectQuestion.bind(this)}>I didn't answer well enough</button>
+                <button className={"play-area-button correct-button " + (this.state.viewingAnswer && !this.state.complete ? '' : 'hidden')} onClick={this.correctQuestion.bind(this)}>I answered it perfectly</button>
+                <button className={"play-area-button full-width " + (this.state.complete ? '' : 'hidden')} onClick={this.completeClicked.bind(this)}>Finish</button>
             </div>
         </div>);
 
@@ -153,12 +167,13 @@ class Gameplay extends Component {
             <div className="game-top">
                 <div className="game-logo">
                     <div className="fifo-red">
-                        FIFO
-                        <Timer countDown={true} onCountdownDone={this.fifoCountdownDone.bind(this)} countdownMins={this.props.gameSettings.fifoMins} />
+                        FIFO: <Timer countDown={true} onCountdownDone={this.fifoCountdownDone.bind(this)} countdownMins={this.props.gameSettings.fifoMins} />
                     </div>
                     <div className="lifo-blue">
-                        LIFO
-                        <Timer countDown={true} onCountdownDone={this.lifoCountdownDone.bind(this)} countdownMins={this.props.gameSettings.lifoMins}/>
+                        LIFO: <Timer countDown={true} onCountdownDone={this.lifoCountdownDone.bind(this)} countdownMins={this.props.gameSettings.lifoMins}/>
+                    </div>
+                    <div>
+                        TIME: <Timer ref="gameTimer" />
                     </div>
                 </div>
                 <div className="fifo-queue">

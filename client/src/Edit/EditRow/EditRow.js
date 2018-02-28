@@ -16,15 +16,6 @@ class EditRow extends Component {
   componentDidMount() {
 
   }
-  saveQuestionData = (qData) => {
-    return fetch('/api/savequestion', {
-      body: JSON.stringify(qData), // must match 'Content-Type'
-      method: "POST",
-      headers: {
-          'content-type': 'application/json'
-          }
-      });
-  }
   undoChanges = e => {
     let originalQuestion = {...this.state.originalQuestion};
     this.setState({ 
@@ -33,8 +24,13 @@ class EditRow extends Component {
     });
   }
   saveQuestion(){
-    this.saveQuestionData(this.state.question)
-    .then(res => {
+    fetch('/api/savequestion', {
+        body: JSON.stringify(this.state.question), // must match 'Content-Type'
+        method: "POST",
+        headers: {
+            'content-type': 'application/json'
+        }
+    }).then(res => {
         console.log(res);
         this.setState({
             isEdited: false
