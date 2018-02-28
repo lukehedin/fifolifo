@@ -22,16 +22,22 @@ class CodeArea extends Component {
         // put caret at right position again
         textArea.selectionStart = textArea.selectionEnd = start + 1;
 
-        //We prevented the default above so we now have to call onChange manually
-        this.props.onChange(e);
+
     }
+
+    //We prevented the default above so we now have to call onChange manually
+    if(this.props.onChange) this.props.onChange(e);
+    if(this.props.onKeyDown) this.props.onKeyDown(e);
+  }
+  focus(){
+    this.refs.textarea.focus();
   }
   render() {
     return (
-        <textarea className={"codearea " + (this.props.className || '')} 
+        <textarea ref="textarea" className={"codearea " + (this.props.className || '')} 
           readOnly={this.props.readOnly}
-          onKeyDown={this.onKeyDown.bind(this)} 
           value={this.props.value} 
+          onKeyDown={this.onKeyDown.bind(this)}
           onChange={this.props.onChange 
             ? this.props.onChange.bind(this) 
             : null}/>

@@ -24,8 +24,12 @@ class Game extends Component {
         .then(res => {
             console.log(res);
   
+            let enabledQuestions = res.filter(q => {
+                return q.enabled;
+            });
+
             this.setState({
-                questions: res,
+                questions: enabledQuestions,
                 gameSettings: gameSettings,
                 timeBegun: new Date()
             });

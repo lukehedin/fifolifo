@@ -23,14 +23,6 @@ class Edit extends Component {
     .catch(err => console.log(err));
   }
   addNewQuestion(){
-    //Find any existing question without an ID
-    let existingNewQ = this.state.questions.find(q => !q.id);
-    
-    if(existingNewQ){
-        alert('Save existing new question first');
-        return;
-    }
-
     this.state.questions.push({
         id: null,
         questionText: "",

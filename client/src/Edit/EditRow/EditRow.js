@@ -30,9 +30,13 @@ class EditRow extends Component {
         headers: {
             'content-type': 'application/json'
         }
-    }).then(res => {
+    })
+    .then(res => res.json())
+    .then(res => {
         console.log(res);
+
         this.setState({
+            question: res.question,
             isEdited: false
         });
     });

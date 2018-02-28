@@ -19,16 +19,16 @@ class Gameplay extends Component {
         fifoItems: [], //array of question arrays
         lifoItems: [] //array of questions
       };
+
+      let lifoItems = [];
+
+      for(let i = 0; i < props.gameSettings.lifoStartAmount; i++){
+          lifoItems.push(this.getRandomQuestion());
+      }
+
+      this.state.lifoItems = lifoItems;
     }
     componentDidMount(){
-        let lifoItems = [];
-
-        for(let i = 0; i < this.props.gameSettings.lifoStartAmount; i++){
-            lifoItems.push(this.getRandomQuestion());
-        }
-
-        this.state.lifoItems = lifoItems;
-
         this.nextQuestion();
     }
     getRandomQuestion(tags = null){
@@ -39,7 +39,10 @@ class Gameplay extends Component {
 
         if(questions.length === 0) {
             //reset used questions
-            this.state.usedQuestionIds = [];
+            this.setState({
+                usedQuestionIds: []
+            });
+
             return this.getRandomQuestion(tags);
         } else{
             var randQuestion = questions[Math.floor(Math.random()*questions.length)];
@@ -86,6 +89,16 @@ class Gameplay extends Component {
             lifoItems: lifoItems,
             viewingAnswer: false
         });
+
+        let gameplay = this;
+
+        setTimeout(() => {
+            if(gameplay.refs.responseCode && topLifo.codeResponse){
+                gameplay.refs.responseCode.focus();
+            } else if(gameplay.refs.responseText && !topLifo.codeResponse){
+                gameplay.refs.responseText.focus();
+            }
+        }, 100);
     }
     viewAnswer(){
         this.setState({
@@ -129,12 +142,27 @@ class Gameplay extends Component {
             incorrectQuestions: this.state.incorrectQuestions
         });
     }
+    onAnswerKeyPress(e){
+        if (e.ctrlKey && (e.keyCode === 37 || e.keyCode === 39)){
+            if(!this.state.viewingAnswer){
+                this.setState({
+                    viewingAnswer: true
+                });
+            } else {
+                if(e.keyCode === 37){
+                    this.incorrectQuestion();
+                } else {
+                    this.correctQuestion();
+                }
+            }
+        }
+    }
     render() {
         let activeQuestionArea = !this.state.activeQuestion 
         ? ''
         : (<div className="play-area">
             <div className="play-area-top">
-                <div className={"question-area " + (this.state.viewingAnswer ? 'hidden' : '')}>
+                <div className={"question-area"}>
                     <div className="question-text">
                         {this.state.activeQuestion.questionText}
                     </div>
@@ -150,8 +178,8 @@ class Gameplay extends Component {
                 </div>
                 <div className="response-area">
                     {this.state.activeQuestion.codeResponse 
-                        ? <CodeArea className="full-textarea" /> 
-                        : <textarea className="full-textarea" />}
+                        ? <CodeArea className="full-textarea" ref="responseCode" onKeyDown={this.onAnswerKeyPress.bind(this)} /> 
+                        : <textarea className="full-textarea" ref="responseText" onKeyDown={this.onAnswerKeyPress.bind(this)} />}
                 </div>
             </div>
             <div className="play-area-bottom">
