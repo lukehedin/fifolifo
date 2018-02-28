@@ -1,0 +1,12 @@
+.lifo-item {
+    width: 100%;
+    display: block;
+    overflow: hidden;
+}
+
+.lifo-tag {
+    background-color: #338ca0;
+    margin: 5px 10px;
+    padding: 5px;
+    color: #fff;
+}

@@ -8,9 +8,13 @@
     width: 20%;    
 }
 
-textarea {
-    width: 30%;
+.question-textarea {
+    width: 32%;
     height: 200px;
+}
+
+.question-setting {
+    display: block;
 }
 
 .editing {

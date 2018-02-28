@@ -1,0 +1,55 @@
+.game{
+    height: 80vh;
+    width: 100vw;
+}
+
+.game-logo, .fifo-queue, .lifo-stack, .play-area {
+    display: inline-block;
+}
+
+.game-top, .game-bottom{
+    display: flex;
+    display: flex;
+}
+
+.game-top{
+    width: 100%;
+}
+
+.game-bottom{
+    height:100%;
+}
+
+.game-logo, .lifo-stack {
+    width: 200px;
+}
+
+.game-logo, .fifo-queue {
+    height: 100px;
+}
+
+.fifo-queue, .play-area {
+    flex-grow: 1;
+}
+
+.fifo-queue{
+    background-color: #ffdad2;
+}
+
+.lifo-stack {
+    background-color:#e0e6e1;
+}
+
+.play-area {
+    padding: 10px;
+    display: flex;
+}
+
+.question-area, .answer-area, .response-area {
+    width: 50%;
+}
+
+.full-textarea {
+    height: 60%;
+    width: 100%;
+}

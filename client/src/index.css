@@ -19,3 +19,7 @@ textarea {
 .lifo-blue {
   color: #338ca0;
 }
+
+.hidden{
+  display: none;
+}

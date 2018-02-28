@@ -7,10 +7,10 @@ const Nav = () => (
         <div className="nav-title">
             <span className="fifo-red">FIFO</span><span className="lifo-blue">LIFO</span>
         </div>
-        <div>
+        <div className="links">
             <Link to="/">Home</Link>
             <Link to="/edit">Edit</Link>
-            <Link to="/game">Game</Link>
+            <Link to="/game">New Game</Link>
             <Link to="/stats">Stats</Link>
         </div>
     </div>

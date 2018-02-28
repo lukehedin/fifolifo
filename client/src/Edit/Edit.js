@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import EditRow from './EditRow/EditRow'
+import './Edit.css'
 
 class Edit extends Component {
   constructor(props) {
@@ -10,9 +11,7 @@ class Edit extends Component {
     }
   }
   componentDidMount() {
-    this.refreshQuestionData;
-  }
-  refreshQuestionData = fetch('/api/questions')
+    fetch('/api/questions')
     .then(res => res.json())
     .then(res => {
         console.log(res);
@@ -22,6 +21,7 @@ class Edit extends Component {
         });
     })
     .catch(err => console.log(err));
+  }
   addNewQuestion(){
     //Find any existing question without an ID
     let existingNewQ = this.state.questions.find(q => !q.id);

@@ -1,0 +1,7 @@
+.cb{
+    display: flex;
+}
+
+.cb-label{
+flex-grow: 1;
+}

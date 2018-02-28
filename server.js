@@ -22,7 +22,14 @@ app.get('/api/questions', (req, res) => {
     //Replace the existing question with the new updatd one
     data.questions[index] = req.body;
   } else{
-    data.questions.push(req.body)
+    var highestId = data.questions.reduce((max, q) => {
+      if(q.id > max) return q.id;
+    }, 0);
+    
+    var newQ = {...req.body};
+    newQ.id = highestId + 1;
+
+    data.questions.push(newQ);
   }
 
   fs.writeFile( "data.json", JSON.stringify( data ), "utf8", () => {
