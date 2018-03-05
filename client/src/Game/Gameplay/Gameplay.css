@@ -25,7 +25,7 @@
 }
 
 .game-logo, .fifo-queue {
-    height: 100px;
+    height: 56px;
 }
 
 .fifo-queue, .play-area {
@@ -37,7 +37,9 @@
 }
 
 .lifo-stack {
-    background-color:#e0e6e1;
+    background-color:#e0e6e1; 
+    display: flex;
+    flex-direction: column-reverse;
 }
 
 .play-area {
@@ -55,7 +57,7 @@
     height: 100px;
 }
 
-.question-area, .answer-area, .response-area {
+.question-area, .response-area {
     width: 50%;
     padding: 10px;
 }
@@ -65,9 +67,17 @@
     flex-direction: column;
 }
 
+.question-text{
+    padding: 20px 0;
+}
+
 .question-code {
    flex-grow: 1;
    position: relative;
+}
+
+.answer-area{
+    height: 50%;
 }
 
 .full-textarea {

@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import './Game.css'
 import GameSetup from './GameSetup/GameSetup';
 import GamePlay from './Gameplay/Gameplay';
 
@@ -25,14 +24,24 @@ class Game extends Component {
             console.log(res);
   
             let enabledQuestions = res.filter(q => {
-                return q.enabled;
+                if(!q.enabled) return false;
+
+                if(gameSettings.tagInclude.length === 0) return true;
+
+                for(let i = 0; i < q.tags.length; i++){
+                    if(gameSettings.tagInclude.indexOf(q.tags[i]) !== -1) return true;
+                }
             });
 
-            this.setState({
-                questions: enabledQuestions,
-                gameSettings: gameSettings,
-                timeBegun: new Date()
-            });
+            if(enabledQuestions.length === 0){
+                alert('No questions available. Change your tags?')
+            } else{
+                this.setState({
+                    questions: enabledQuestions,
+                    gameSettings: gameSettings,
+                    timeBegun: new Date()
+                });
+            }
         })
         .catch(err => console.log(err));
     }

@@ -31,24 +31,28 @@ class Gameplay extends Component {
     componentDidMount(){
         this.nextQuestion();
     }
-    getRandomQuestion(tags = null){
-        //TODO tag filter
+    getRandomQuestion(){
+        let usedQuestionIds = this.state.usedQuestionIds;
+
         let questions = this.props.questions.filter(q => {
-            return this.state.usedQuestionIds.indexOf(q.id) === -1;
+            return usedQuestionIds.indexOf(q.id) === -1;
         });
 
         if(questions.length === 0) {
-            //reset used questions
-            this.setState({
-                usedQuestionIds: []
-            });
-
-            return this.getRandomQuestion(tags);
-        } else{
-            var randQuestion = questions[Math.floor(Math.random()*questions.length)];
-            this.state.usedQuestionIds.push(randQuestion.id);
-            return randQuestion;
+            //If no questions left, empty the array and clear the filter on questions
+            usedQuestionIds.length = 0;
+            questions = this.props.questions;
         }
+        
+        var randQuestion = questions[Math.floor(Math.random()*questions.length)];
+        usedQuestionIds.push(randQuestion.id);
+
+        //update used questions
+        this.setState({
+            usedQuestionIds: usedQuestionIds
+        });
+        
+        return randQuestion;
     }
     nextQuestion(prevIncorrect = false){
         //Any logic handling the new state of the fifo/lifo items must be here.
@@ -90,13 +94,13 @@ class Gameplay extends Component {
             viewingAnswer: false
         });
 
-        let gameplay = this;
-
         setTimeout(() => {
-            if(gameplay.refs.responseCode && topLifo.codeResponse){
-                gameplay.refs.responseCode.focus();
-            } else if(gameplay.refs.responseText && !topLifo.codeResponse){
-                gameplay.refs.responseText.focus();
+            if(this.refs.responseCode && topLifo.codeResponse){
+                this.refs.responseCode.value = "";
+                this.refs.responseCode.focus();
+            } else if(this.refs.responseText && !topLifo.codeResponse){
+                this.refs.responseText.value = "";            
+                this.refs.responseText.focus();
             }
         }, 100);
     }
@@ -126,7 +130,18 @@ class Gameplay extends Component {
         this.nextQuestion(true);
     }
     fifoCountdownDone(){
+        let fifoItems = [...this.state.fifoItems];
+        let newFifoItem = [];
 
+        for(let i = 0; i < this.props.gameSettings.fifoAmount; i++){
+            newFifoItem.push(this.getRandomQuestion(this.state.activeQuestion.tags));
+        }
+
+        fifoItems.push(newFifoItem);
+
+        this.setState({
+            fifoItems: fifoItems
+        });
     }
     lifoCountdownDone(){        
         let lifoItems = [...this.state.lifoItems];  
@@ -163,6 +178,11 @@ class Gameplay extends Component {
         : (<div className="play-area">
             <div className="play-area-top">
                 <div className={"question-area"}>
+                    <div className={"answer-area " + (this.state.viewingAnswer ? '' : 'hidden')}>
+                        {this.state.activeQuestion.codeResponse 
+                            ? <CodeArea readOnly className="full-textarea" value={this.state.activeQuestion.answer} /> 
+                            : <textarea readOnly className="full-textarea" value={this.state.activeQuestion.answer} />}
+                    </div>
                     <div className="question-text">
                         {this.state.activeQuestion.questionText}
                     </div>
@@ -170,11 +190,6 @@ class Gameplay extends Component {
                         ? <CodeArea readOnly className="full-textarea" value={this.state.activeQuestion.questionCode} />
                         : ''
                     }
-                </div>
-                <div className={"answer-area " + (this.state.viewingAnswer ? '' : 'hidden')}>
-                    {this.state.activeQuestion.codeResponse 
-                        ? <CodeArea readOnly className="full-textarea" value={this.state.activeQuestion.answer} /> 
-                        : <textarea readOnly className="full-textarea" value={this.state.activeQuestion.answer} />}
                 </div>
                 <div className="response-area">
                     {this.state.activeQuestion.codeResponse 

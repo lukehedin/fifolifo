@@ -17,6 +17,10 @@
     display: block;
 }
 
+.disabled {
+    background-color: #d0c8b9;
+}
+
 .editing {
     background-color: #e6c078;
 }

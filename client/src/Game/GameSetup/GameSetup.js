@@ -10,6 +10,7 @@ class GameSetup extends Component {
           fifoMins: 0, //timer to add another question to the fifo queue
           lifoStartAmount: 5, // initial amount of questions
           lifoMins: 0, //timer to add another question to the lifo stack
+          tagInclude: [], 
 
           tags: []
       };
@@ -19,7 +20,10 @@ class GameSetup extends Component {
         fifoAmount:  this.refs.fifoAmount.value,
         fifoMins:  this.refs.fifoMins.value,
         lifoStartAmount: this.refs.lifoStartAmount.value,
-        lifoMins: this.refs.lifoMins.value
+        lifoMins: this.refs.lifoMins.value,
+        tagInclude: this.refs.tagInclude.value
+          ? this.refs.tagInclude.value.split(',') 
+          : []
       };
 
       this.props.startGameFn(settings);
@@ -46,6 +50,11 @@ class GameSetup extends Component {
             <b className="lifo-blue">Lifo Minutes</b>
             <div>How many minutes before another question is added to the lifo stack (0 for never)</div>
             <input type="number" ref="lifoMins" defaultValue={this.state.lifoMins} />  
+          </div>
+          <div className="setup-setting">
+            <b>Tags</b>
+            <div>Only include questions with these tags (leave blank for none)</div>
+            <input type="text" ref="tagInclude" defaultValue="" />
           </div>
           <button ref="startButton" onClick={this.onStartClick.bind(this)}>Start</button>
       </div>)

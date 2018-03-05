@@ -59,7 +59,7 @@ class EditRow extends Component {
   onTagChange = e => this.updateQuestionProperty('tags', e.target.value.split(','))
   render() {
     return (
-        <div className={"edit-row " + (this.state.isEdited ? 'editing' : '')}>
+        <div className={"edit-row " + (this.state.isEdited ? 'editing ' : '') + (!this.state.question.enabled ? 'disabled' : '')}>
             <div className="textareas">
                 <textarea className="question-textarea" value={(this.state.question.questionText || '')} onChange={this.onTextChange.bind(this)} />
                 <CodeArea className="question-textarea" value={(this.state.question.questionCode || '')} onChange={this.onCodeChange.bind(this)} />
